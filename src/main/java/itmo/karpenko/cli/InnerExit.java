@@ -1,20 +1,13 @@
 package itmo.karpenko.cli;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- *
- * @author mkarpenko
- *
- * Этот класс не будет использоваться.
- * Функция данного класса -- команда Cat
+ * реализация exit
  */
 
-public class InnerExit implements Programm {
+public class InnerExit implements Program {
 
     /**
      * Все функции завершают программу

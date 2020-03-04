@@ -8,7 +8,6 @@ import java.util.List;
  * по умолчанию одиночные команды такие
  */
 
-
 public class Command {
     public String name;
     public List<String> args;

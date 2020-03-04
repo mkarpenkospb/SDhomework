@@ -5,7 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class InnerPwd implements Programm {
+
+/**
+ *
+ * Реализация программы pwd
+ */
+public class InnerPwd implements Program {
 
     @Override
     public String execute(List<String> args) throws IOException {

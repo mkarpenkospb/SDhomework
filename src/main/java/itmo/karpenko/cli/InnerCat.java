@@ -1,7 +1,6 @@
 package itmo.karpenko.cli;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,7 +14,7 @@ import java.util.List;
  * Функция данного класса -- команда Cat
  */
 
-public class InnerCat implements Programm {
+public class InnerCat implements Program {
 
     /**
      * Данная функция считывает входной файл, указанный в пути <tt>filename</tt>,

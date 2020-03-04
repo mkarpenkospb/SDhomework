@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.*;
 
+/**
+ * имплементация для функций,
+ * которым необходимо состояние
+ */
 public class ReaderImpl implements Reader {
 
     private boolean closed = true;

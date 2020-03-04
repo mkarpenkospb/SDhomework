@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
+/**
 * Класс Reader читает входную строку
 * Задача класса - понять,
 * что строка закончилась или принять решение о продолжении
-* чтения
+* чтения. Но затем этот класс стал обрабатывать строки.
 * */
 public interface Reader {
-    static String template = new String("\" \t'");
+//    static String template = new String("\" \t'");
     static String typeQuotas = new String("\"'");
     /*
     * Читает входящую строку и собирает её

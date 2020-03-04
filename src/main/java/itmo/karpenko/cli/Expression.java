@@ -5,7 +5,6 @@ package itmo.karpenko.cli;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,14 +12,20 @@ import java.util.*;
 
 
 /**
- * класс для формирования исполняемы команд
+ * класс для формирования исполняемых команд
+ * и их исполнения
  */
 
 public class Expression {
-
+    /**
+     * определяет ось
+     */
     public static boolean windows = System.getProperty("os.name").toLowerCase().contains("windows");
 
-    public static Map<String, Programm> innerProgramms;
+    /**
+     * все доступные реализованные команды
+     */
+    public static Map<String, Program> innerProgramms;
     static {
         innerProgramms = new HashMap<>();
         innerProgramms.put("cat", new InnerCat());
@@ -30,6 +35,12 @@ public class Expression {
         innerProgramms.put("exit", new InnerExit());
     }
 
+    /**
+     * функция формирует pipeline,
+     * null, если последовательно некорректная
+     * @param tokens принимает набор токенов на вход
+     * @return команды
+     */
     static List<Command> getPipe(List<Token> tokens) {
         boolean correctFlag = false;
         List<Command> pipeLine = new ArrayList<>();
@@ -57,11 +68,12 @@ public class Expression {
                     pipeLine.add(new Command(token.strValue, null, false));
                     correctFlag = false;
                 } else {
-                    // TODO кинуть исключение
+                    System.out.println("Invalid pipe");
                     return null;
                 }
             }
             if (correctFlag) {
+                System.out.println("Invalid pipe");
                 return null;
             }
 
@@ -69,7 +81,7 @@ public class Expression {
         return pipeLine;
     }
 
-    static String[] getFullExec(Command cmd) {
+    private static String[] getFullExec(Command cmd) {
         StringBuilder res = new StringBuilder(cmd.name);
         for (String args : cmd.args) {
             res.append(" ").append(args);
@@ -77,7 +89,7 @@ public class Expression {
         return res.toString().split(" ");
     }
 
-    static void runProgram(Command cmd) throws IOException, InterruptedException {
+    private static void runProgram(Command cmd) throws IOException, InterruptedException {
         if (innerProgramms.containsKey(cmd.name)) {
             System.out.print(innerProgramms.get(cmd.name).execute(cmd.args));
         } else {
@@ -114,6 +126,12 @@ public class Expression {
         }
     }
 
+    /**
+     * Функция, выполняющая команды
+     * @param commands
+     * @throws IOException
+     * @throws InterruptedException
+     */
     static void execute(List<Command> commands) throws IOException, InterruptedException {
         if (commands.size() == 1) {
             runProgram(commands.get(0));

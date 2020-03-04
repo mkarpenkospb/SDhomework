@@ -3,6 +3,9 @@ package itmo.karpenko.cli;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * данный класс реализует диалог с пользователем
+ */
 public class Session {
 
 
@@ -15,7 +18,9 @@ public class Session {
             if (inputTokens != null) {
 //                List<Token> clearTokens = Reader.parseTokens(inputTokens, environment);
                 List<Command> commands = Expression.getPipe(inputTokens);
-                Expression.execute(commands);
+                if (commands != null) {
+                    Expression.execute(commands);
+                }
             }
         }
     }

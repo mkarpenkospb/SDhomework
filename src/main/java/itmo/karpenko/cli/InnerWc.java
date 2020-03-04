@@ -3,8 +3,13 @@ package itmo.karpenko.cli;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class InnerWc implements Programm {
+/**
+ * реализацтя wc
+ */
+public class InnerWc implements Program {
 
     /**
      * функция считает число строк, слов и байти в файле
@@ -56,23 +61,45 @@ public class InnerWc implements Programm {
      * @return
      * @throws IOException
      */
+//    @Override
+//    public String execute(String arg) throws IOException {
+//        StringBuilder result = new StringBuilder();
+//        List<String> file = Arrays.asList(arg.split("\n"));
+//        long bytes = 0;
+//        long lines = 0;
+//        long wordCount = 0;
+//        for(String line: file) {
+//            lines ++;
+//            wordCount += line.trim().split("\\s+").length;
+//            bytes += line.getBytes().length;
+//        }
+//        bytes += lines;
+//        result.append(lines + " " + wordCount + " " + bytes + "\n");
+//        return result.toString();
+//    }
     @Override
     public String execute(String arg) throws IOException {
         StringBuilder result = new StringBuilder();
         List<String> file = Arrays.asList(arg.split("\n"));
+        Pattern linesFind =
+                Pattern.compile("\n");
+        Matcher matcher1 = linesFind.matcher(arg);
         long bytes = 0;
         long lines = 0;
         long wordCount = 0;
-        for(String line: file) {
+        while (matcher1.find())
+        {
             lines ++;
+        }
+
+        for(String line: file) {
             wordCount += line.trim().split("\\s+").length;
             bytes += line.getBytes().length;
         }
-        bytes += lines - 1;
+        bytes += lines;
         result.append(lines + " " + wordCount + " " + bytes + "\n");
         return result.toString();
     }
-
 
 //    public static String readBuffer(){
 //
