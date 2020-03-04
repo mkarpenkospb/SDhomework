@@ -6,7 +6,7 @@ import java.util.List;
 public class Session {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         VariablesImpl environment = new VariablesImpl();
         Reader reader = new ReaderImpl();
         while (true) {
