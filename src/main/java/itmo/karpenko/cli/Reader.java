@@ -3,7 +3,6 @@ package itmo.karpenko.cli;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +34,16 @@ public interface Reader {
         Matcher m = varAssigne.matcher(fromInput);
         return m.matches();
     }
+
+
+    /**
+     * Функция уберает кавычки и разносит слова по
+     * типам токенов, так же обрабатывает тип 2
+     *
+     * @see Token
+     * @param fromInput - строка, которую ввел пользователь
+     * @return -  набор токенов
+     */
 
     static List<Token> getTokens(String fromInput) {
         int begin;
@@ -83,9 +92,9 @@ public interface Reader {
     };
 
     /**
-     * функция подставляет переменные
-     * и выделяет склеенные |
-     * @param tokens
+     * функция подставляет переменные в $
+     * @param tokens -
+     * @param env
      * @return
      */
     static List<Token> parseTokens(List<Token> tokens, VariablesImpl env) {
@@ -117,6 +126,14 @@ public interface Reader {
         return result;
     }
 
+
+    /**
+     *
+     * @param fromInput строка, введенная пользователем
+     * @param environment переменне
+     * @return набор токенов, отличный по кавычкам, с подстваленными переменными
+     * и выдеренными |
+     */
     static List<Token> parseString(String fromInput, VariablesImpl environment) {
         List<Token> tokensFirstPass = getTokens(fromInput);
         List<Token> tokensSeckondPass = parseTokens(tokensFirstPass, environment);

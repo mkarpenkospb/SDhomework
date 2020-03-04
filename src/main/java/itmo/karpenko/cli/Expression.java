@@ -27,14 +27,8 @@ public class Expression {
         innerProgramms.put("echo", new InnerEcho());
         innerProgramms.put("wc", new InnerWc());
         innerProgramms.put("pwd", new InnerPwd());
+        innerProgramms.put("exit", new InnerExit());
     }
-
-//
-//    static {
-//        articleMapOne = new HashMap<>();
-//        articleMapOne.put("ar01", "Intro to Map");
-//        articleMapOne.put("ar02", "Some article");
-//    }
 
     static List<Command> getPipe(List<Token> tokens) {
         boolean correctFlag = false;
@@ -85,7 +79,7 @@ public class Expression {
 
     static void runProgram(Command cmd) throws IOException, InterruptedException {
         if (innerProgramms.containsKey(cmd.name)) {
-            System.out.println(innerProgramms.get(cmd.name).execute(cmd.args));
+            System.out.print(innerProgramms.get(cmd.name).execute(cmd.args));
         } else {
             ProcessBuilder pBuild = new ProcessBuilder(windows ? "where" : "which", cmd.name);
             Path pathToTarget = null;
@@ -124,13 +118,18 @@ public class Expression {
         if (commands.size() == 1) {
             runProgram(commands.get(0));
         } else {
-//            for
+           for (Command cmd: commands) {
+                if(!innerProgramms.containsKey(cmd.name)) {
+                    System.out.println("Cannot build pipeLine with external programms");
+                    return;
+                }
+            }
             String nextArg = innerProgramms.get(commands.get(0).name).execute(commands.get(0).args);
             commands = commands.subList(1, commands.size());
             for (Command com: commands) {
                 nextArg = innerProgramms.get(com.name).execute(nextArg);
             }
-            System.out.println(nextArg);
+            System.out.print(nextArg);
         }
     }
 

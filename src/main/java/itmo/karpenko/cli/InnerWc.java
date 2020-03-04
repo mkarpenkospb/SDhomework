@@ -6,6 +6,12 @@ import java.util.List;
 
 public class InnerWc implements Programm {
 
+    /**
+     * функция считает число строк, слов и байти в файле
+     * @param files - список файлов
+     * @return
+     * @throws IOException
+     */
     @Override
     public String execute(List<String> files) throws IOException {
         StringBuilder result = new StringBuilder();
@@ -43,6 +49,13 @@ public class InnerWc implements Programm {
         return null;
     }
 
+
+    /**
+     * Считает число строк, слов и байт во входной строке
+     * @param arg - входная строка
+     * @return
+     * @throws IOException
+     */
     @Override
     public String execute(String arg) throws IOException {
         StringBuilder result = new StringBuilder();

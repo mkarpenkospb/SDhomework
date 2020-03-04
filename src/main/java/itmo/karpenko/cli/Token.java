@@ -28,9 +28,10 @@ public class Token {
     /**
      * Преобразует строку список токетов 3 типа
      * Регулярное - выражение -позиции начала слов
-     * @param fromInput
-//     * @param currSearch
-     * @return
+     * Выделяет | в отдельный токен
+     * @param fromInput - часть входной строки без кавычек
+     * @param d - позиция начала этой строки в исходной
+     * @return -  список токенов второго типа
      */
     public static List<Token> spliType2(String fromInput, int d) {
         Pattern varAssigne1 =

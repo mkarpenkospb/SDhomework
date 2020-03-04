@@ -13,8 +13,8 @@ public class Session {
             String input = reader.readStream();
             List<Token> inputTokens = Reader.parseString(input, environment);
             if (inputTokens != null) {
-                List<Token> clearTokens = Reader.parseTokens(inputTokens, environment);
-                List<Command> commands = Expression.getPipe(clearTokens);
+//                List<Token> clearTokens = Reader.parseTokens(inputTokens, environment);
+                List<Command> commands = Expression.getPipe(inputTokens);
                 Expression.execute(commands);
             }
         }

@@ -34,8 +34,9 @@ public class InnerCat implements Programm {
              while((line = in.readLine()) != null)
              {
                  result.append(line);
+                 result.append("\n");
              }
-             result.append("\n");
+//             result.append("\n");
              in.close();
          }
          return result.toString();
@@ -46,6 +47,13 @@ public class InnerCat implements Programm {
         return null;
     }
 
+    /**
+     * Считывает не файл, а переданную строку после pipe
+     *
+     * @param arg
+     * @return
+     * @throws IOException
+     */
     @Override
     public String execute(String arg) throws IOException {
         List<String> lines = Arrays.asList(arg.split("\n"));
