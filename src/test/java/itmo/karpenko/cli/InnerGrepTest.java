@@ -43,7 +43,7 @@ public class InnerGrepTest {
 
     @Test
     public void testGrep() throws InterruptedException, ParseException, IOException {
-        String input = "grep ttt file1.txt";
+        String input = "grep ttt file3.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
         List<Command> commands = Expression.getPipe(inputTokens);
@@ -59,7 +59,7 @@ public class InnerGrepTest {
 
     @Test
     public void testGrepW() throws InterruptedException, ParseException, IOException {
-        String input = "grep ttt -w file1.txt";
+        String input = "grep ttt -w file3.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
         List<Command> commands = Expression.getPipe(inputTokens);
@@ -71,13 +71,12 @@ public class InnerGrepTest {
 
     @Test
     public void testGrepI() throws InterruptedException, ParseException, IOException {
-        String input = "grep ttt -i file1.txt";
+        String input = "grep ttt -i file3.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
         List<Command> commands = Expression.getPipe(inputTokens);
         assertNotNull(commands);
         Expression.execute(commands);
-        String test = outContent.toString();
         assertEquals("strttt\n" +
                 "strttt2\n" +
                 "sjsjhj hdjhjs ttt ttt\n" +
@@ -88,13 +87,12 @@ public class InnerGrepTest {
 
     @Test
     public void testGrepCombo() throws InterruptedException, ParseException, IOException {
-        String input = "grep ttt -i -w -A 2 file1.txt";
+        String input = "grep ttt -i -w -A 2 file3.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
         List<Command> commands = Expression.getPipe(inputTokens);
         assertNotNull(commands);
         Expression.execute(commands);
-        String test = outContent.toString();
         assertEquals("sjsjhj hdjhjs ttt ttt\n" +
                 "ttt uiuiauf\n" +
                 "tttghghg\n" +
@@ -105,25 +103,25 @@ public class InnerGrepTest {
 
     @Test
     public void testGrepRegexTwoFiles() throws InterruptedException, ParseException, IOException {
-        String input = "grep 's..' file1.txt file2.txt";
+        String input = "grep 's..' file3.txt file4.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
         List<Command> commands = Expression.getPipe(inputTokens);
         assertNotNull(commands);
         Expression.execute(commands);
         String test = outContent.toString();
-        assertEquals("file1.txt:str 1\n" +
-                "file1.txt:str 2\n" +
-                "file1.txt:str 3\n" +
-                "file1.txt:strttt\n" +
-                "file1.txt:wro gdsshsh\n" +
-                "file1.txt:strttt2\n" +
-                "file1.txt:sjsjhj hdjhjs ttt ttt\n" +
-                "file1.txt:sfs\n" +
-                "file1.txt:sgssf\n" +
-                "file2.txt:str 11\n" +
-                "file2.txt:str22\n" +
-                "file2.txt:str33 nl\n", outContent.toString());
+        assertEquals("file3.txt:str 1\n" +
+                "file3.txt:str 2\n" +
+                "file3.txt:str 3\n" +
+                "file3.txt:strttt\n" +
+                "file3.txt:wro gdsshsh\n" +
+                "file3.txt:strttt2\n" +
+                "file3.txt:sjsjhj hdjhjs ttt ttt\n" +
+                "file3.txt:sfs\n" +
+                "file3.txt:sgssf\n" +
+                "file4.txt:str 11\n" +
+                "file4.txt:str22\n" +
+                "file4.txt:str33 nl\n", outContent.toString());
     }
 
 

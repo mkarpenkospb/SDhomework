@@ -19,7 +19,7 @@ public class InnerCatTest {
 
     @Test
     public void TestCat() throws IOException {
-//        String res = cat.execute(Arrays.asList("file1.txt"));
+        String res = cat.execute(Arrays.asList("file1.txt"));
         assertEquals("str 1\nstr 2\nstr 3\n",
                 cat.execute(Arrays.asList("file1.txt")));
         assertEquals("str 11\nstr22\nstr33 nl\n\n",
