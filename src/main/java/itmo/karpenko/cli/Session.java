@@ -1,5 +1,7 @@
 package itmo.karpenko.cli;
 
+import org.apache.commons.cli.ParseException;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
 public class Session {
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, ParseException {
         VariablesImpl environment = new VariablesImpl();
         Reader reader = new ReaderImpl();
         while (true) {

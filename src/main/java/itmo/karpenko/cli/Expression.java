@@ -3,6 +3,8 @@ package itmo.karpenko.cli;
 
 //import sun.security.x509.AttributeNameEnumeration;
 
+import org.apache.commons.cli.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,6 +35,7 @@ public class Expression {
         innerProgramms.put("wc", new InnerWc());
         innerProgramms.put("pwd", new InnerPwd());
         innerProgramms.put("exit", new InnerExit());
+        innerProgramms.put("grep", new InnerGrep());
     }
 
     /**
@@ -89,7 +92,7 @@ public class Expression {
         return res.toString().split(" ");
     }
 
-    private static void runProgram(Command cmd) throws IOException, InterruptedException {
+    private static void runProgram(Command cmd) throws IOException, ParseException {
         if (innerProgramms.containsKey(cmd.name)) {
             System.out.print(innerProgramms.get(cmd.name).execute(cmd.args));
         } else {
@@ -132,7 +135,7 @@ public class Expression {
      * @throws IOException
      * @throws InterruptedException
      */
-    static void execute(List<Command> commands) throws IOException, InterruptedException {
+    static void execute(List<Command> commands) throws IOException, InterruptedException, ParseException {
         if (commands.size() == 1) {
             runProgram(commands.get(0));
         } else {

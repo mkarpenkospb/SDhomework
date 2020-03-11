@@ -1,5 +1,6 @@
 package itmo.karpenko.cli;
 
+import org.apache.commons.cli.ParseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void pipeTestEchoWc() throws IOException, InterruptedException {
+    public void pipeTestEchoWc() throws IOException, InterruptedException, ParseException {
         String input = "echo 123| wc";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
@@ -49,7 +50,7 @@ public class ExpressionTest {
 
 
     @Test
-    public void pipeCatWc1() throws IOException, InterruptedException {
+    public void pipeCatWc1() throws IOException, InterruptedException, ParseException {
         String input = "cat file1.txt| wc";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
@@ -60,7 +61,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void pipeCatWc2() throws IOException, InterruptedException {
+    public void pipeCatWc2() throws IOException, InterruptedException, ParseException {
         String input = "cat file1.txt file2.txt| wc";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNotNull(inputTokens);
@@ -81,7 +82,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void varsSub() throws IOException, InterruptedException {
+    public void varsSub() throws IOException, InterruptedException, ParseException {
         String input = "a=file1.txt";
         List<Token> inputTokens = Reader.parseString(input, env);
         assertNull(inputTokens);
