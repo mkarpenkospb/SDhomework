@@ -1,35 +1,29 @@
 package itmo.karpenko.cli;
 
+import org.apache.commons.cli.ParseException;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 /**
  * реализация exit
  */
 
-public class InnerExit implements Program {
+class InnerExit implements Program {
 
-    /**
-     * Все функции завершают программу
-     * @param files
-     * @return
-     * @throws IOException
-     */
+    private List<String> args;
+
     @Override
-    public String execute(List<String> files) throws IOException {
-
-         return execute();
+    public void setArgs(List<String> args) {
+        this.args = args;
     }
 
     @Override
-    public String execute() throws IOException {
+    public void execute(InputStream inStream, PrintStream outStream)
+            throws IOException, ParseException {
         System.exit(0);
-        return null;
-    }
-
-    @Override
-    public String execute(String arg) throws IOException {
-        return execute();
     }
 
 }

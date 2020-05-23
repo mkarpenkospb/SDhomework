@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNull;
 
-public class ReaderTest {
+public class ReaderParserTest {
     private ReaderImpl reader;
 
     @Before
@@ -36,15 +36,13 @@ public class ReaderTest {
 
     @Test
     public void testTokens() {
-        VariablesImpl env = new VariablesImpl();
-        assertNull(Reader.parseString("a=7", env));
-        assertNull(Reader.parseString("b=8", env));
-        List<Token> inputTokens = Reader.parseString("\"echo\" $a$b", env);
+        Variables env = new Variables();
+        assertNull(Parser.parseString("a=7", env));
+        assertNull(Parser.parseString("b=8", env));
+        List<Token> inputTokens = Parser.parseString("\"echo\" $a$b", env);
         assertEquals(2, inputTokens.size());
-        assertEquals("78", inputTokens.get(1).strValue);
-        List<Token> inputTokens2 = Reader.parseString("\"echo\" $c$b", env);
-        assertEquals("8", inputTokens2.get(1).strValue);
+        assertEquals("78", inputTokens.get(1).toString());
+        List<Token> inputTokens2 = Parser.parseString("\"echo\" $c$b", env);
+        assertEquals("8", inputTokens2.get(1).toString());
     }
-
-
 }

@@ -9,19 +9,17 @@ import java.util.List;
  * данный класс реализует диалог с пользователем
  */
 public class Session {
-
-
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
-        VariablesImpl environment = new VariablesImpl();
+        Variables environment = new Variables();
         Reader reader = new ReaderImpl();
+        Executor executor = new Executor(System.out);
         while (true) {
             String input = reader.readStream();
-            List<Token> inputTokens = Reader.parseString(input, environment);
+            List<Token> inputTokens = Parser.parseString(input, environment);
             if (inputTokens != null) {
-//                List<Token> clearTokens = Reader.parseTokens(inputTokens, environment);
-                List<Command> commands = Expression.getPipe(inputTokens);
+                List<Program> commands = executor.getPipe(inputTokens);
                 if (commands != null) {
-                    Expression.execute(commands);
+                    executor.execute(commands);
                 }
             }
         }

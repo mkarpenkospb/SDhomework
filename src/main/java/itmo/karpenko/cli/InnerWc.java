@@ -1,108 +1,89 @@
 package itmo.karpenko.cli;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Scanner;
 
 /**
  * реализацтя wc
  */
 public class InnerWc implements Program {
 
-    /**
-     * функция считает число строк, слов и байти в файле
-     * @param files - список файлов
-     * @return
-     * @throws IOException
-     */
+
+    private List<String> args;
+
     @Override
-    public String execute(List<String> files) throws IOException {
-        StringBuilder result = new StringBuilder();
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    static class TotalCounter {
         long totalBytes = 0;
         long totalLines = 0;
         long totalWordCount = 0;
-        for (String fileItem: files) {
-            File file = new File(fileItem);
-            FileReader freader = new FileReader(file);
-            BufferedReader fbuffer = new BufferedReader(freader);
-            long bytes = 0;
-            long lines = 0;
-            long wordCount = 0;
-            String line;
-            while((line=fbuffer.readLine())!=null) {
-                lines ++;
-                wordCount += line.trim().split("\\w+").length;
-                bytes += line.getBytes().length;
+    }
+
+    @Override
+    public void execute(InputStream inStream, PrintStream outStream)
+            throws IOException {
+
+        if (inStream != null) {
+            innerRun(inStream, outStream, null, null);
+        } else {
+            TotalCounter counter = new TotalCounter();
+            for (String file : args) {
+                InputStream fileStream = new BufferedInputStream(new FileInputStream(file));
+                innerRun(fileStream, outStream, file, counter);
+                fileStream.close();
             }
-            freader.close();
-            bytes += lines;
-            result.append(lines + " " + wordCount + " " + bytes + "\n");
-            totalBytes += bytes;
-            totalLines += lines;
-            totalWordCount += wordCount;
+            if (args.size() > 1) {
+                outStream.append(String.valueOf(counter.totalLines)).
+                        append(" ").append(String.valueOf(counter.totalWordCount)).
+                        append(" ").append(String.valueOf(counter.totalBytes)).
+                        append(" total\n");
+            }
         }
-        if(files.size() > 1) {
-            result.append(totalLines + " " + totalWordCount + " " + totalBytes + " total\n");
-        }
-        return result.toString();
-    }
 
-    @Override
-    public String execute() throws IOException {
-        return null;
     }
 
 
-    /**
-     * Считает число строк, слов и байт во входной строке
-     * @param arg - входная строка
-     * @return
-     * @throws IOException
-     */
-//    @Override
-//    public String execute(String arg) throws IOException {
-//        StringBuilder result = new StringBuilder();
-//        List<String> file = Arrays.asList(arg.split("\n"));
-//        long bytes = 0;
-//        long lines = 0;
-//        long wordCount = 0;
-//        for(String line: file) {
-//            lines ++;
-//            wordCount += line.trim().split("\\s+").length;
-//            bytes += line.getBytes().length;
-//        }
-//        bytes += lines;
-//        result.append(lines + " " + wordCount + " " + bytes + "\n");
-//        return result.toString();
-//    }
-    @Override
-    public String execute(String arg) throws IOException {
-        StringBuilder result = new StringBuilder();
-        List<String> file = Arrays.asList(arg.split("\n"));
-        Pattern linesFind =
-                Pattern.compile("\n");
-        Matcher matcher1 = linesFind.matcher(arg);
+    void innerRun(InputStream inStream, PrintStream outStream, String filename,
+                  TotalCounter coutner) {
+        String line, suff = "";
+        Scanner sc = new Scanner(inStream);
+        int currentWordCount;
         long bytes = 0;
         long lines = 0;
         long wordCount = 0;
-        while (matcher1.find())
-        {
-            lines ++;
+        if (filename != null) {
+            suff = " " + filename;
         }
-
-        for(String line: file) {
-            wordCount += line.trim().split("\\s+").length;
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            lines++;
+            if (line.trim().equals("")) {
+                currentWordCount = 0;
+            } else {
+                currentWordCount = line.trim().split("\\w+").length;
+            }
+            wordCount += currentWordCount;
+            if (currentWordCount == 0 && line.trim().length() > 0) {
+                wordCount ++;
+            }
             bytes += line.getBytes().length;
         }
         bytes += lines;
-        result.append(lines + " " + wordCount + " " + bytes + "\n");
-        return result.toString();
+        outStream.append(String.valueOf(lines)).
+                append(" ").append(String.valueOf(wordCount)).
+                append(" ").append(String.valueOf(bytes)).append(suff).append("\n");
+
+        if (coutner != null) {
+            coutner.totalBytes += bytes;
+            coutner.totalLines += lines;
+            coutner.totalWordCount += wordCount;
+        }
+
     }
 
-//    public static String readBuffer(){
-//
-//    }
 
 }

@@ -1,5 +1,6 @@
 package itmo.karpenko.cli;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,12 +10,31 @@ import java.util.List;
  */
 
 public class Command {
-    public String name;
-    public List<String> args;
-    boolean inHead;
-    Command(String name, List<String> args, boolean inHead) {
+    private String name = null;
+    private List<String> args;
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getArgs() {
+        return args;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    Command() {
+        args = new ArrayList<>();
+    }
+
+    Command(String name, List<String> args) {
         this.name = name;
         this.args = args;
-        this.inHead = inHead;
     }
 }
