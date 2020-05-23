@@ -105,12 +105,6 @@ public class Parser {
         return tokens;
     }
 
-    /**
-     * функция подставляет переменные в $
-     * @param tokens -
-     * @param env
-     * @return
-     */
     static List<Token> parseTokens(List<Token> tokens, Variables env) {
         List<Token> result = new ArrayList<>();
         int beg;
@@ -138,13 +132,6 @@ public class Parser {
     }
 
 
-    /**
-     *
-     * @param fromInput строка, введенная пользователем
-     * @param environment переменне
-     * @return набор токенов, отличный по кавычкам, с подстваленными переменными
-     * и выдеренными |
-     */
     static List<Token> parseString(String fromInput, Variables environment) {
         List<Token> tokensFirstPass = getTokens(fromInput);
         List<Token> tokensSecondPass = parseTokens(tokensFirstPass, environment);

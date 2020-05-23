@@ -8,17 +8,10 @@ import java.util.Scanner;
  *
  * @author mkarpenko
  *
- * Этот класс не будет использоваться.
  * Функция данного класса -- команда Cat
  */
 
 public class InnerCat implements Program {
-    /**
-     * Данная функция считывает входной файл, указанный в пути <tt>filename</tt>,
-     * и выводит содержимое в стандартный поток вывода.
-     *     * @param files имя файла
-     * @throws IOException
-     */
     static String FILE_NOT_FOUND = "cat: %s:  No such file or directory\n";
 
     private List<String> args;

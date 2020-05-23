@@ -28,6 +28,4 @@ public class InnerPwd implements Program {
         Path currentDirectory = Paths.get("");
         outStream.append(currentDirectory.toAbsolutePath().toString());
     }
-
-
 }

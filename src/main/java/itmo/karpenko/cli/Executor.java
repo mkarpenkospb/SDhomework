@@ -10,9 +10,7 @@ import java.util.*;
  * и их исполнения
  */
 public class Executor {
-    /**
-     * определяет ось
-     */
+
     private final PrintStream outStream;
     public Executor(PrintStream outStream) {
         this.outStream = outStream;
