@@ -104,13 +104,7 @@ public class Parser {
         }
         return tokens;
     }
-
-    /**
-     * функция подставляет переменные в $
-     * @param tokens -
-     * @param env
-     * @return
-     */
+    
     static List<Token> parseTokens(List<Token> tokens, Variables env) {
         List<Token> result = new ArrayList<>();
         int beg;

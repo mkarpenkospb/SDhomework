@@ -28,6 +28,7 @@ public class Executor {
         innerPrograms.put("wc", new InnerWc());
         innerPrograms.put("pwd", new InnerPwd());
         innerPrograms.put("exit", new InnerExit());
+        innerPrograms.put("grep", new InnerGrep());
     }
 
     /**
