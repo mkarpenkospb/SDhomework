@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.cli.*;
 
+/**
+ * Команда ищет в переданном её тексте строки, соответствующие шаблону
+ */
 public class InnerGrep implements Program {
 
     static final String FILE_NOT_FOUND = "grep: %s: No such file or directory\n";
@@ -19,8 +22,6 @@ public class InnerGrep implements Program {
 
     private String sndPrefixForMatch = "";
     private String sndPrefixForLinesAfterMatch = "";
-    private int nLines = 0;
-    private String devider = "";
 
     private List<String> args;
 
@@ -60,7 +61,6 @@ public class InnerGrep implements Program {
         }
 
         String toFind = commandLine.getArgs()[0];
-        String file;
 
         if (commandLine.hasOption("w")) {
             toFind = "\\b" + toFind + "\\b";
@@ -72,6 +72,8 @@ public class InnerGrep implements Program {
             pattern = Pattern.compile(toFind);
         }
 
+        int nLines = 0;
+        String divider = "";
         if (commandLine.hasOption("A")) {
             try {
                 nLines = Integer.parseInt(commandLine.getOptionValues("A")[0]);
@@ -83,40 +85,49 @@ public class InnerGrep implements Program {
                         commandLine.getOptionValues("A")[0]));
                 return;
             }
-            devider = ConsoleColors.CYAN  + "--\n" + ConsoleColors.RESET;
+            divider = ConsoleColors.CYAN + "--\n" + ConsoleColors.RESET;
         }
 
         // если нужно искать шаблон в нескольких файлах, форматируем вывод
         if (commandLine.getArgs().length > 2) {
             sndPrefixForMatch = ConsoleColors.CYAN + ":" + ConsoleColors.RESET;
-            sndPrefixForLinesAfterMatch = ConsoleColors.CYAN  + "-" + ConsoleColors.RESET;
+            sndPrefixForLinesAfterMatch = ConsoleColors.CYAN + "-" + ConsoleColors.RESET;
         }
 
         if (inStream != null) {
-            innerRun(inStream, outStream, "");
-        } else {
-            for (int i = 1; i < commandLine.getArgs().length; i++) {
-                file = commandLine.getArgs()[i];
-                if (i > 1) {
-                    outStream.append(devider);
-                }
-                if ((new File(file)).exists()) {
-                    InputStream fileStream = new BufferedInputStream(new FileInputStream(file));
-                    if (commandLine.getArgs().length == 2) {
-                        file = "";
-                    } else {
-                        file = ConsoleColors.PURPLE + file + ConsoleColors.RESET;
-                    }
-                    innerRun(fileStream, outStream, file);
-                    fileStream.close();
-                } else {
-                    outStream.append(String.format(FILE_NOT_FOUND, file));
-                }
+            innerRun(inStream, outStream, "", divider, nLines);
+            return;
+        }
+
+        String file;
+        for (int i = 1; i < commandLine.getArgs().length; i++) {
+            file = commandLine.getArgs()[i];
+            if (!(new File(file)).exists()) {
+                outStream.append(String.format(FILE_NOT_FOUND, file));
+                continue;
+            }
+            if (i > 1) {
+                outStream.append(divider);
+            }
+            try (InputStream fileStream = new BufferedInputStream(new FileInputStream(file))) {
+                file = commandLine.getArgs().length == 2 ?
+                        "" : ConsoleColors.PURPLE + file + ConsoleColors.RESET;
+                innerRun(fileStream, outStream, file, divider, nLines);
             }
         }
     }
 
-    void innerRun(InputStream inStream, PrintStream ouStream, String prefix) {
+    /**
+     *
+     * @param inStream текст для обработки
+     * @param ouStream строки, соотвествующие запросу поиска
+     * @param prefix переменная оформления - имя файла в случае, когда
+     *               обрабатываются несколько файлов, иначе пустая строка
+     * @param divider переменная оформления - при наличии опции '-A' разделяет
+     *                найденные группы строк символами "--"
+     * @param nLines значение аргумента опции '-A'
+     */
+    private void innerRun(InputStream inStream, PrintStream ouStream, String prefix, String divider, int nLines) {
         int cnt = 0;
         int delta = 0;
         Matcher matcher;
@@ -127,26 +138,25 @@ public class InnerGrep implements Program {
             line = sc.nextLine();
             matcher = pattern.matcher(line);
             if (matcher.find()) {
-                if (delta > 0 && cnt > 0) {
-                    ouStream.append(devider);
+                if (delta > 0 && found) {
+                    ouStream.append(divider);
                 }
                 ouStream.append(prefix).append(sndPrefixForMatch)
                         .append(formatLine(line, matcher)).append("\n");
                 found = true;
                 delta = 0;
-                cnt = 0;
-            } else if (cnt < nLines && found) {
+                cnt = 1;
+            } else if (cnt > 0 && cnt <= nLines) {
                 ouStream.append(prefix).append(sndPrefixForLinesAfterMatch)
                         .append(line).append("\n");
                 cnt++;
             } else {
-                delta ++;
-                found = false;
+                delta++;
             }
         }
     }
 
-    String formatLine(String line, Matcher matcher) {
+    private String formatLine(String line, Matcher matcher) {
         StringBuilder result = new StringBuilder();
         int end = 0;
         do {
@@ -162,10 +172,10 @@ public class InnerGrep implements Program {
         return result.toString();
     }
 
-    void checkArguments(CommandLine commandLine) throws IllegalArgumentException {
+    private void checkArguments(CommandLine commandLine) throws IllegalArgumentException {
         if (commandLine.hasOption("A") &&
                 (commandLine.getOptionValues("A") == null ||
-                commandLine.getOptionValues("A").length != 1)) {
+                        commandLine.getOptionValues("A").length != 1)) {
             throw new IllegalArgumentException(String.format(INVALID_NUM_OF_ARGUMENTS,
                     'A'));
         }
