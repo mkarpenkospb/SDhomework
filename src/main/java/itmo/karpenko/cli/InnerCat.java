@@ -1,11 +1,8 @@
 package itmo.karpenko.cli;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -15,54 +12,47 @@ import java.util.List;
  * Функция данного класса -- команда Cat
  */
 
-public class InnerCat implements Programm {
-
+public class InnerCat implements Program {
     /**
      * Данная функция считывает входной файл, указанный в пути <tt>filename</tt>,
      * и выводит содержимое в стандартный поток вывода.
-     *
-     *
-     * @param files имя файла
+     *     * @param files имя файла
      * @throws IOException
      */
+    static String FILE_NOT_FOUND = "cat: %s:  No such file or directory\n";
+
+    private List<String> args;
+
     @Override
-    public String execute(List<String> files) throws IOException {
-        StringBuilder result = new StringBuilder();
-         for (String file: files) {
-             BufferedReader in = new BufferedReader(new FileReader(file));
-             String line;
-             while((line = in.readLine()) != null)
-             {
-                 result.append(line);
-                 result.append("\n");
-             }
-//             result.append("\n");
-             in.close();
-         }
-         return result.toString();
+    public void setArgs(List<String> args) {
+        this.args = args;
     }
 
     @Override
-    public String execute() throws IOException {
-        return null;
-    }
-
-    /**
-     * Считывает не файл, а переданную строку после pipe
-     *
-     * @param arg
-     * @return
-     * @throws IOException
-     */
-    @Override
-    public String execute(String arg) throws IOException {
-        List<String> lines = Arrays.asList(arg.split("\n"));
-        StringBuilder result = new StringBuilder();
-        for(String line: lines) {
-            result.append(line);
+    public void execute(InputStream inStream, PrintStream outStream)
+            throws IOException {
+        if (inStream != null) {
+            innerRun(inStream, outStream);
+        } else {
+            for (String file: args) {
+                if ((new File(file)).exists()) {
+                    InputStream fileStream = new BufferedInputStream(new FileInputStream(file));
+                    innerRun(fileStream, outStream);
+                    fileStream.close();
+                } else {
+                    outStream.append(String.format(FILE_NOT_FOUND, file));
+                }
+            }
         }
-        result.append("\n");
-        return result.toString();
     }
 
+    void innerRun(InputStream inStream, PrintStream ouStream) {
+        String line;
+        Scanner sc = new Scanner(inStream);
+        while(sc.hasNextLine()) {
+            line = sc.nextLine();
+            ouStream.append(line);
+            ouStream.append("\n");
+        }
+    }
 }

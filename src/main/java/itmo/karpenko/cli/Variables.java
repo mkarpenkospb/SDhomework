@@ -1,11 +1,10 @@
 package itmo.karpenko.cli;
 
 import java.util.HashMap;
-import java.util.List;
 
-public class VariablesImpl {
+public class Variables {
 
-    public HashMap<String, String> env = new HashMap<String, String>();
+    final private HashMap<String, String> env = new HashMap<>();
 
     public void saveVar(String token) {
         int eqPosition = token.indexOf('=');
